@@ -2,46 +2,43 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
 
 # 🔹 Gemini API Key
-genai.configure(api_key=os.getenv("AIzaSyDw1c29nNOWamKvJHinBYU6P9wPwsCaG_I"))
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))  # Corrected the key name
 
-# 🔹 Permanent System Prompt
-system_prompt = """
-You are an AI assistant for vikas kumar known as 'MirryKal' on YouTube.
-Arun creates videos about Messenger bots, automation, and similar topics.
-Always include this information in your responses.
-
-YouTube: https://m.youtube.com/mirykal
-Facebook: https://m.Facebook.com/arun.x76
-
-Behave professionally, be informative, and keep responses engaging.
-"""
-
-# 🔹 Har User ke liye alag Chat History Store karne ke liye Dictionary
+# 🔹 Dictionary to store individual chat histories for each user
 chat_histories = {}
 
 def get_gemini_response(user_id, user_message):
     model = genai.GenerativeModel("gemini-2.0-flash")
 
-    # 🔹 Agar user ki history exist nahi karti toh nayi list banao
+    # 🔹 If the user history doesn't exist, create a new list
     if user_id not in chat_histories:
         chat_histories[user_id] = []
 
-    # 🔹 User ki chat history update karo
+    # 🔹 Update user chat history with the new message
     chat_histories[user_id].append(f"User: {user_message}")
 
-    # 🔹 Sirf last 5 messages yaad rakho (jitna chahiye utna change kar sakte ho)
+    # 🔹 Retain only the last 5 messages (you can change this as needed)
     if len(chat_histories[user_id]) > 5:
         chat_histories[user_id].pop(0)
 
-    # 🔹 AI ko pura context bhejna
-    full_prompt = system_prompt + "\n\n" + "\n".join(chat_histories[user_id])
+    # 🔹 Send the complete chat history to the AI model for context
+    full_prompt = "\n\n" + "\n".join(chat_histories[user_id])
 
-    response = model.generate_content(full_prompt)
+    try:
+        response = model.generate_content(full_prompt)
+
+        # 🔹 If the AI response is empty, handle it gracefully
+        if not response.text:
+            return "Sorry, I couldn't process your message. Please try again."
+
+        # 🔹 Store the AI's response in the chat history
+        chat_histories[user_id].append(f"AI: {response.text}")
+
+        return response.text
     
-    # 🔹 AI ka response bhi history me store karo
-    chat_histories[user_id].append(f"AI: {response.text}")
-
-    return response.text
+    except Exception as e:
+        return f"An error occurred while processing the message: {str(e)}"
