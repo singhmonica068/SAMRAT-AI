@@ -8,7 +8,7 @@ load_dotenv()
 # 🔹 Gemini API Key
 genai.configure(api_key=os.getenv("AIzaSyBvBqHAc8Djm4jn30V_LIAcjF8EDguvrQQ"))  # Corrected the key name
 
-# 🔹 Dictionary to store individual chat histories for each user
+# 🔹 Dctionary to store individual chat histories for each user
 chat_histories = {}
 
 def get_gemini_response(user_id, user_message):
