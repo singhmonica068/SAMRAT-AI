@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 🔹 Gemini API Key
-genai.configure(api_key=os.getenv("AIzaSyBtBLNXS4EDgk4J6GunrVDA3dx_FYGa7x8"))  # Corrected the key name
+genai.configure(api_key=os.getenv("AIzaSyC56KiR4gfr0HadJ6p7fSzSdOb9sfsn3P4"))  # Corrected the key name
 
 # 🔹 Dctionary to store individual chat histories for each user
 chat_histories = {}
