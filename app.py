@@ -4,7 +4,7 @@ import requests
 app = Flask(__name__)
 
 # 🔹 Gemini API Key
-GEMINI_API_KEY = "AIzaSyC7vCjhEUTq5aLIVlNyT492wqvuflJHRM4"
+GEMINI_API_KEY = "AIzaSyCQhDTt-5Cu0OQ-9iHcmJXuXQr3eqKfIoQ"
 
 # 🔹 Gemini API Call Function
 def get_gemini_response(user_input):
